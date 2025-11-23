@@ -1,40 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Boo Questions of the Day
 
-## Getting Started
+A Next.js application for displaying daily questions with interactive commenting features, including likes, shares, and image attachments.
 
-First, run the development server:
+## How to Run
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Development Time
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+- **Start Time**: 20:35
+- **End Time**: 00:22
+- **Total Time**: ~3.5 hours
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## What Was Completed
 
-## Learn More
+- ✅ Load question from API (mock data)
+- ✅ Display information in the UI:
+  - Question card with question text, date, and engagement metrics
+  - Comment input composer
+  - Comment list with nested structure
+- ✅ Actions implemented:
+  - Like question (toggle like state and update count)
+  - Like comment (toggle like state and update count)
+  - Share question (copy link to clipboard with toast notification)
+  - Share comment (copy link to clipboard)
+  - Create a new comment with text and/or image attachment
+  - Add newly created comment to comment list (optimistic update)
 
-To learn more about Next.js, take a look at the following resources:
+## What Was Skipped
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+- ❌ GIF picker in comment creation
+- ❌ Display comment replies (reply functionality not implemented)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## What Would Be Improved With More Time
 
-## Deploy on Vercel
+- Add more functionalities (e.g., edit/delete comments, user authentication, search)
+- Enhanced styling and visual design
+- Improved UX interactions (animations, transitions, loading states)
+- Better error handling and validation
+- Accessibility improvements
+- Performance optimizations
+- Testing (unit tests, integration tests)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
