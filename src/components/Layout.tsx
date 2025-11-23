@@ -6,19 +6,17 @@ type LayoutProps = {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="flex min-h-screen w-full bg-background text-text-primary">
       {/* Left sidebar - 25% */}
-      <aside className="w-[25%] bg-zinc-50 dark:bg-zinc-900">
+      <aside className="w-[25%]">
         {/* Left sidebar content can be added here */}
       </aside>
 
       {/* Main content - 50% */}
-      <main className="w-[50%] bg-white dark:bg-black">
-        {children}
-      </main>
+      <main className="w-[50%]">{children}</main>
 
       {/* Right sidebar - 25% */}
-      <aside className="w-[25%] bg-zinc-50 dark:bg-zinc-900">
+      <aside className="w-[25%]">
         {/* Right sidebar content can be added here */}
       </aside>
     </div>

@@ -1,26 +1,68 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Dark theme colors (default) */
+  --text-color-primary: #fff;
+  --background-color: rgb(0 0 0);
+  --background-color-variant1: transparent;
+  --background-color-variant2: transparent;
+  --overlay-color: rgba(0, 0, 0, 0.6);
+  --frame-color-neutral: #fff;
+  --frame-color-success: #4edcd8;
+  --frame-color-warning: red;
+  --frame-color-invalid-manual: red;
+  --button-color: #4edcd8;
+  --button-color-hover: #4edcd8;
+  --button-color-press: #4edcd8;
+  --primary-button-text-color: #000;
+  --font-family: "__Roboto_372368", "__Roboto_Fallback_372368";
+  --accent-color: 78 220 216;
+  --super-love-color: 255 108 150;
+  --primary-color: 0 0 0;
+  --primary-color-dark: 255 255 255;
+  --shadow-color: hsla(0, 0%, 100%, 0.25);
+  --shimmer-color: #424242;
+  
+  /* Legacy variables for compatibility */
+  --background: var(--background-color);
+  --foreground: var(--text-color-primary);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Colors */
+  --color-text-primary: var(--text-color-primary);
+  --color-background: var(--background-color);
+  --color-background-variant1: var(--background-color-variant1);
+  --color-background-variant2: var(--background-color-variant2);
+  --color-overlay: var(--overlay-color);
+  --color-frame-neutral: var(--frame-color-neutral);
+  --color-frame-success: var(--frame-color-success);
+  --color-frame-warning: var(--frame-color-warning);
+  --color-frame-invalid: var(--frame-color-invalid-manual);
+  --color-button: var(--button-color);
+  --color-button-hover: var(--button-color-hover);
+  --color-button-press: var(--button-color-press);
+  --color-button-text: var(--primary-button-text-color);
+  
+  /* Theme Colors */
+  --color-accent: rgb(var(--accent-color));
+  --color-super-love: rgb(var(--super-love-color));
+  --color-primary: rgb(var(--primary-color));
+  --color-primary-dark: rgb(var(--primary-color-dark));
+  --color-shadow: var(--shadow-color);
+  --color-shimmer: var(--shimmer-color);
+  
+  /* Legacy colors */
+  --color-foreground: var(--text-color-primary);
+  
+  /* Fonts */
+  --font-sans: var(--font-roboto-sans);
+  --font-mono: var(--font-roboto-mono);
+  --font-main: var(--font-family);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--background-color);
+  color: var(--text-color-primary);
+  font-family: var(--font-family), Arial, Helvetica, sans-serif;
 }
