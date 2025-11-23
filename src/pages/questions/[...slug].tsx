@@ -1,17 +1,26 @@
 import { Question, Comment } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
+import { useState } from "react";
 import QuestionCard from "@/components/QuestionCard";
 import CommentComposer from "@/components/CommentComposer";
 import CommentCard from "@/components/CommentCard";
 import { CommentFocusProvider } from "@/context/CommentFocusContext";
+import { createComment } from "@/aggregates/comment";
 
 type QuestionPageProps = {
   question?: Question;
   error?: string;
 };
 
-export default function QuestionPage({ question, error }: QuestionPageProps) {
+export default function QuestionPage({
+  question: initialQuestion,
+  error,
+}: QuestionPageProps) {
+  const [question, setQuestion] = useState<Question | undefined>(
+    initialQuestion
+  );
+
   if (error || !question) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center py-32 px-16">
@@ -31,54 +40,42 @@ export default function QuestionPage({ question, error }: QuestionPageProps) {
     );
   }
 
-  // Render nested comments recursively
-  const renderComment = (comment: Comment) => (
-    <div className="flex flex-col gap-y-5">
-      <CommentCard
-        comment={comment}
-        onLike={(commentId) => {
-          // TODO: Implement like functionality
-          console.log("Like comment:", commentId);
-        }}
-        onComment={(commentId) => {
-          // TODO: Implement comment functionality
-          console.log("Comment on comment:", commentId);
-        }}
-        onShare={(commentId) => {
-          // TODO: Implement share functionality
-          console.log("Share comment:", commentId);
-        }}
-        onReply={(commentId) => {
-          // TODO: Implement reply functionality
-          console.log("Reply to comment:", commentId);
-        }}
-      />
-      {/* Render nested comments (replies) */}
-      {comment.comments && comment.comments.length > 0 && (
-        <div className="ms-4 flex flex-col gap-y-5">
-          {comment.comments.map((reply) => (
-            <div key={reply.id}>{renderComment(reply)}</div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const handleCommentSubmit = (comment: {
+    text: string;
+    image?: File;
+    gif?: string;
+  }) => {
+    const newComment: Comment = createComment(
+      comment.text,
+      comment.image,
+      comment.gif
+    );
 
-  // Filter top-level comments (comments without a parent)
-  const topLevelComments = question.comments.filter(
-    (comment) => !comment.parent
-  );
+    // Add the new comment to the question's comments array
+    setQuestion((prevQuestion) => {
+      if (!prevQuestion) return prevQuestion;
+      return {
+        ...prevQuestion,
+        comments: [newComment, ...prevQuestion.comments],
+        numComments: prevQuestion.numComments + 1,
+      };
+    });
+  };
 
   return (
     <CommentFocusProvider>
       <div className="flex flex-col items-center justify-center p-16 gap-y-4 sm:items-start">
         <QuestionCard question={question} />
-        <CommentComposer />
+        <CommentComposer onSubmit={handleCommentSubmit} />
         {/* Render all top-level comments */}
         {question.comments.length > 0 && (
           <div className="flex flex-col gap-y-5 w-full">
             {question.comments.map((comment) => (
-              <div key={comment.id}>{renderComment(comment)}</div>
+              <div key={comment.id}>
+                <div className="flex flex-col gap-y-5">
+                  <CommentCard comment={comment} />
+                </div>
+              </div>
             ))}
           </div>
         )}
