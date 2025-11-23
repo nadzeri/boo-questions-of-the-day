@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useRef, useId, useEffect } from "react";
 import Image from "next/image";
 import { useCommentFocus } from "@/context/CommentFocusContext";
@@ -17,6 +15,7 @@ export default function CommentComposer({
 }: CommentComposerProps) {
   const [comment, setComment] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -47,6 +46,19 @@ export default function CommentComposer({
     }
   }, [registerFocus]);
 
+  // Create preview URL for selected image
+  useEffect(() => {
+    if (selectedImage) {
+      const url = URL.createObjectURL(selectedImage);
+      setImagePreview(url);
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    } else {
+      setImagePreview(null);
+    }
+  }, [selectedImage]);
+
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setComment(value);
@@ -75,6 +87,13 @@ export default function CommentComposer({
   const handleGifClick = () => {
     // TODO: Implement GIF picker
     console.log("GIF picker not implemented yet");
+  };
+
+  const handleClearImage = () => {
+    setSelectedImage(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   const handleSend = () => {
@@ -125,6 +144,39 @@ export default function CommentComposer({
         autoComplete="off"
         rows={1}
       />
+      {imagePreview && (
+        <div
+          className="relative cursor-pointer w-full"
+          style={{ aspectRatio: "1 / 1" }}
+        >
+          <img
+            alt="Selected image preview"
+            src={imagePreview}
+            className="rounded-2xl shadow object-cover"
+            style={{
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              inset: "0px",
+              color: "transparent",
+            }}
+          />
+          <div
+            onClick={handleClearImage}
+            className="absolute top-2.5 right-2.5 bg-black/40 shadow shadow-white/25 rounded-full duration-500 cursor-pointer hover:scale-105 active:scale-95 w-6 h-6 p-1 flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 -960 960 960"
+              className="fill-white w-4 h-4"
+            >
+              <path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
+            </svg>
+          </div>
+        </div>
+      )}
       <p
         className={`text-sm text-red-500 duration-500 whitespace-pre ${
           error ? "opacity-100" : "opacity-0"
@@ -141,7 +193,11 @@ export default function CommentComposer({
           >
             <div className="relative w-[27px] h-[27px]">
               <Image
-                src="/icons/image.svg"
+                src={
+                  selectedImage
+                    ? "/icons/image-selected.svg"
+                    : "/icons/image.svg"
+                }
                 alt="Attach image"
                 width={27}
                 height={27}

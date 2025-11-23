@@ -1,5 +1,3 @@
-"use client";
-
 import { createContext, useContext, useRef, ReactNode } from "react";
 
 type CommentFocusContextType = {
@@ -36,4 +34,3 @@ export function useCommentFocus() {
   }
   return context;
 }
-

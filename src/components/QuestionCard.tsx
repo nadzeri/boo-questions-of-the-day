@@ -1,5 +1,3 @@
-"use client";
-
 import { Question } from "@/lib/types";
 import Link from "next/link";
 import Image from "next/image";

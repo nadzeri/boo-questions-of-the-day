@@ -29,6 +29,6 @@ export function formatRelativeTime(date: Date | string): string {
     .replace("months", "mo")
     .replace("year", "y")
     .replace("years", "y")
-    .replace("ds", "d");
+    .replace(" ds", "d");
 }
 
