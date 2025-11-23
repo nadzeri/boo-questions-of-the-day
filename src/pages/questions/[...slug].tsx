@@ -1,6 +1,7 @@
 import { Question } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
+import QuestionCard from "@/components/QuestionCard";
 
 type QuestionPageProps = {
   question?: Question;
@@ -28,8 +29,10 @@ export default function QuestionPage({ question, error }: QuestionPageProps) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between py-32 px-16 sm:items-start">
-      Test
+    <div className="flex flex-col items-center justify-center p-16 sm:items-start">
+      <div className="w-full max-w-2xl">
+        <QuestionCard question={question} />
+      </div>
     </div>
   );
 }
