@@ -64,7 +64,7 @@ export default function QuestionPage({
 
   return (
     <CommentFocusProvider>
-      <div className="flex flex-col items-center justify-center p-16 gap-y-4 sm:items-start">
+      <div className="flex flex-col items-center justify-center gap-y-4 sm:items-start">
         <QuestionCard question={question} />
         <CommentComposer onSubmit={handleCommentSubmit} />
         {/* Render all top-level comments */}
