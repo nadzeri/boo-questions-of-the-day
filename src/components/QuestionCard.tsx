@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
 import { useState } from "react";
+import Toast from "./Toast";
 
 type QuestionCardProps = {
   question: Question;
@@ -11,6 +12,8 @@ type QuestionCardProps = {
 export default function QuestionCard({ question }: QuestionCardProps) {
   const [numLikes, setNumLikes] = useState(question.numLikes);
   const [isLiked, setIsLiked] = useState(false);
+  const [isShareActive, setIsShareActive] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const handleLikeClick = () => {
     if (isLiked) {
@@ -21,8 +24,35 @@ export default function QuestionCard({ question }: QuestionCardProps) {
       setIsLiked(true);
     }
   };
+
+  const handleShareClick = async () => {
+    try {
+      // Construct full URL
+      const fullUrl =
+        typeof window !== "undefined"
+          ? `${window.location.origin}${question.url}`
+          : question.url;
+
+      // Copy to clipboard
+      await navigator.clipboard.writeText(fullUrl);
+
+      // Show toast and change color
+      setShowToast(true);
+      setIsShareActive(true);
+
+      // Reset share button color after 2 seconds
+      setTimeout(() => {
+        setIsShareActive(false);
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to copy URL:", err);
+    }
+  };
   return (
-    <div className="bg-primary shadow duration-500 px-5 py-4 rounded-3xl flex flex-col gap-y-2 group">
+    <div className="relative bg-primary shadow duration-500 px-5 py-4 rounded-3xl flex flex-col gap-y-2 group">
+      {showToast && (
+        <Toast message="Copied Link!" onHide={() => setShowToast(false)} />
+      )}
       {/* Question of the Day label */}
       <p className="text-sm text-primary-dark hover:text-accent duration-500 cursor-pointer text-start">
         Question of the Day
@@ -75,14 +105,25 @@ export default function QuestionCard({ question }: QuestionCardProps) {
         <p className="text-sm -ms-1.5 text-gray">{question.numComments}</p>
 
         {/* Share button */}
-        <button className="cursor-pointer duration-500 hover:scale-110 active:scale-95">
+        <button
+          className="cursor-pointer duration-500 hover:scale-110 active:scale-95"
+          onClick={handleShareClick}
+        >
           <div className="relative w-6 h-6 text-gray">
             <Image
               src="/icons/share.svg"
               alt="Share"
               width={24}
               height={24}
-              className="text-gray"
+              className="text-gray transition-all duration-500"
+              style={
+                isShareActive
+                  ? {
+                      filter:
+                        "brightness(0) saturate(100%) invert(86%) sepia(100%) saturate(400%) hue-rotate(168deg) brightness(1.05) contrast(0.95)",
+                    }
+                  : {}
+              }
             />
           </div>
         </button>
