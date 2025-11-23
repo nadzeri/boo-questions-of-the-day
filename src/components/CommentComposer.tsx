@@ -17,6 +17,7 @@ export default function CommentComposer({
   const [comment, setComment] = useState("");
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [error, setError] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uniqueId = useId();
@@ -81,13 +82,19 @@ export default function CommentComposer({
   };
 
   return (
-    <div className="shadow p-5 rounded-3xl flex flex-col gap-y-1 duration-500 bg-primary">
+    <div
+      className={`shadow p-5 rounded-3xl flex flex-col gap-y-1 duration-500 bg-primary w-full ${
+        isFocused ? "shadow-accent" : ""
+      }`}
+    >
       <textarea
         ref={textareaRef}
         placeholder={placeholder}
         value={comment}
         onChange={handleTextareaChange}
         onKeyDown={handleKeyDown}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         className="text-sm max-h-72 h-5 bg-transparent text-primary-dark placeholder:text-gray-400 resize-none outline-none overflow-hidden"
         maxLength={maxLength}
         autoComplete="off"
@@ -100,7 +107,7 @@ export default function CommentComposer({
       >
         {error}
       </p>
-      <div className="flex justify-between items-end mt-2">
+      <div className="flex justify-between items-center mt-2">
         <div className="flex items-center gap-x-2.5">
           {/* Image attachment button */}
           <label
