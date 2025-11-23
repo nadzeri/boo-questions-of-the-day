@@ -25,6 +25,6 @@ export type Profile = {
   firstName: string;
   personality: string | null;
   horoscope: string | null;
-  onneagram: string | null;
+  anneagram: string | null;
   picture: string | null;
 };

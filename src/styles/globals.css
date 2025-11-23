@@ -22,6 +22,10 @@
   --primary-color-dark: 255 255 255;
   --shadow-color: hsla(0, 0%, 100%, 0.25);
   --shimmer-color: #424242;
+  --potential-color: #FFD700;
+  --horoscope-color: #1e3a5f;
+  --enneagram-color: #13A6A2;
+  --gray-color: #9ca3af;
   
   /* Legacy variables for compatibility */
   --background: var(--background-color);
@@ -51,6 +55,10 @@
   --color-primary-dark: rgb(var(--primary-color-dark));
   --color-shadow: var(--shadow-color);
   --color-shimmer: var(--shimmer-color);
+  --color-potential: var(--potential-color);
+  --color-horoscope: var(--horoscope-color);
+  --color-enneagram: var(--enneagram-color);
+  --color-gray: var(--gray-color);
   
   /* Legacy colors */
   --color-foreground: var(--text-color-primary);
