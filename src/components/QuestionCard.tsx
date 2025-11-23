@@ -45,11 +45,12 @@ export default function QuestionCard({ question }: QuestionCardProps) {
       // Reset share button color after 2 seconds
       setTimeout(() => {
         setIsShareActive(false);
-      }, 2000);
+      }, 1000);
     } catch (err) {
       console.error("Failed to copy URL:", err);
     }
   };
+
   return (
     <div className="relative bg-primary shadow duration-500 px-5 py-4 rounded-3xl flex flex-col gap-y-2 group">
       {showToast && (

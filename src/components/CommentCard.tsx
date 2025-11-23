@@ -1,27 +1,56 @@
+import { useState } from "react";
 import { Comment } from "@/lib/types";
 import Image from "next/image";
 import { formatRelativeTime } from "@/lib/utils";
+import Toast from "./Toast";
 
 type CommentCardProps = {
   comment: Comment;
-  onLike?: (commentId: string) => void;
-  onComment?: (commentId: string) => void;
-  onShare?: (commentId: string) => void;
-  onReply?: (commentId: string) => void;
 };
 
-export default function CommentCard({
-  comment,
-  onLike,
-  onComment,
-  onShare,
-  onReply,
-}: CommentCardProps) {
+export default function CommentCard({ comment }: CommentCardProps) {
+  const [isLiked, setIsLiked] = useState(false);
+  const [numLikes, setNumLikes] = useState(comment.numLikes);
+  const [isShareActive, setIsShareActive] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  const handleLike = () => {
+    const newLikedState = !isLiked;
+    setIsLiked(newLikedState);
+    setNumLikes((prev) => (newLikedState ? prev + 1 : prev - 1));
+  };
+
+  const handleShareClick = async () => {
+    try {
+      // Construct full URL with comment ID as hash anchor
+      const fullUrl =
+        typeof window !== "undefined"
+          ? `${window.location.origin}${window.location.pathname}#${comment.id}`
+          : `#${comment.id}`;
+
+      // Copy to clipboard
+      await navigator.clipboard.writeText(fullUrl);
+
+      // Show toast and change color
+      setShowToast(true);
+      setIsShareActive(true);
+
+      // Reset share button color after 2 seconds
+      setTimeout(() => {
+        setIsShareActive(false);
+      }, 1000);
+    } catch (err) {
+      console.error("Failed to copy URL:", err);
+    }
+  };
   return (
     <div
       id={comment.id}
-      className="bg-primary shadow duration-500 px-5 py-4 rounded-3xl flex flex-col gap-y-2 group hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
+      className="relative bg-primary shadow duration-500 px-5 py-4 rounded-3xl flex flex-col gap-y-2 group hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
     >
+      {showToast && (
+        <Toast message="Copied Link!" onHide={() => setShowToast(false)} />
+      )}
       {/* Profile section */}
       <div className="flex flex-row items-center group/profile">
         <div className="h-12 w-12 relative me-3 duration-500 cursor-pointer group-hover/profile:scale-[1.03] active:scale-[0.99]">
@@ -136,12 +165,12 @@ export default function CommentCard({
       <div className="flex flex-row items-center gap-x-2">
         {/* Like button */}
         <button
-          onClick={() => onLike?.(comment.id)}
+          onClick={handleLike}
           className="cursor-pointer duration-500 hover:scale-110 active:scale-[0.99]"
         >
           <div className="relative w-6 h-6">
             <Image
-              src="/icons/like.svg"
+              src={isLiked ? "/icons/blue-like.svg" : "/icons/like.svg"}
               alt="Like"
               width={24}
               height={24}
@@ -149,13 +178,10 @@ export default function CommentCard({
             />
           </div>
         </button>
-        <p className="text-sm -ms-1.5 text-gray">{comment.numLikes}</p>
+        <p className="text-sm -ms-1.5 text-gray">{numLikes}</p>
 
         {/* Comment button */}
-        <button
-          onClick={() => onComment?.(comment.id)}
-          className="cursor-pointer duration-500 hover:scale-100 active:scale-[0.85] scale-90"
-        >
+        <button className="cursor-pointer duration-500 hover:scale-100 active:scale-[0.85] scale-90">
           <div className="relative w-6 h-6">
             <Image
               src="/icons/comment.svg"
@@ -170,7 +196,7 @@ export default function CommentCard({
 
         {/* Share button */}
         <button
-          onClick={() => onShare?.(comment.id)}
+          onClick={handleShareClick}
           className="cursor-pointer duration-500 hover:scale-110 active:scale-[0.99]"
         >
           <div className="relative w-6 h-6">
@@ -180,6 +206,15 @@ export default function CommentCard({
               width={24}
               height={24}
               loading="lazy"
+              className="transition-all duration-500"
+              style={
+                isShareActive
+                  ? {
+                      filter:
+                        "brightness(0) saturate(100%) invert(86%) sepia(100%) saturate(400%) hue-rotate(168deg) brightness(1.05) contrast(0.95)",
+                    }
+                  : {}
+              }
             />
           </div>
         </button>
@@ -188,10 +223,7 @@ export default function CommentCard({
         <div className="flex-grow"></div>
 
         {/* Reply button */}
-        <button
-          onClick={() => onReply?.(comment.id)}
-          className="text-sm cursor-pointer duration-500 hover:text-accent text-gray"
-        >
+        <button className="text-sm cursor-pointer duration-500 hover:text-accent text-gray">
           Reply
         </button>
       </div>

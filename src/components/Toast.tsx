@@ -6,7 +6,7 @@ type ToastProps = {
   onHide?: () => void;
 };
 
-export default function Toast({ message, timeout = 2000, onHide }: ToastProps) {
+export default function Toast({ message, timeout = 1000, onHide }: ToastProps) {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
