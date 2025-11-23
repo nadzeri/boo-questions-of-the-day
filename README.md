@@ -2,6 +2,10 @@
 
 A Next.js application for displaying daily questions with interactive commenting features, including likes, shares, and image attachments.
 
+## Live Demo
+
+🌐 [View Live Demo](https://boo-questions-of-the-f22zuxil7-nadzeri-munawars-projects.vercel.app)
+
 ## How to Run
 
 1. Install dependencies:
