@@ -1,9 +1,12 @@
+"use client";
+
 import { Question } from "@/lib/types";
 import Link from "next/link";
 import Image from "next/image";
 import { format } from "date-fns";
 import { useState } from "react";
 import Toast from "./Toast";
+import { useCommentFocus } from "@/context/CommentFocusContext";
 
 type QuestionCardProps = {
   question: Question;
@@ -14,6 +17,7 @@ export default function QuestionCard({ question }: QuestionCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [isShareActive, setIsShareActive] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const { focusTextarea } = useCommentFocus();
 
   const handleLikeClick = () => {
     if (isLiked) {
@@ -133,8 +137,22 @@ export default function QuestionCard({ question }: QuestionCardProps) {
 
         {/* Comment link */}
         <Link
-          href={question.url}
+          href={`${question.url}#comment`}
           className="text-sm cursor-pointer duration-500 hover:text-accent text-gray"
+          onClick={(e) => {
+            // If we're on the same page, prevent navigation and focus textarea
+            if (typeof window !== "undefined") {
+              const currentPath = window.location.pathname;
+              const targetPath = question.url.startsWith("/")
+                ? question.url
+                : new URL(question.url, window.location.origin).pathname;
+
+              if (currentPath === targetPath) {
+                e.preventDefault();
+                focusTextarea();
+              }
+            }
+          }}
         >
           Comment
         </Link>

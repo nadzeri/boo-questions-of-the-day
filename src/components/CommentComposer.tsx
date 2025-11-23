@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef, useId } from "react";
+import { useState, useRef, useId, useEffect } from "react";
 import Image from "next/image";
+import { useCommentFocus } from "@/context/CommentFocusContext";
 
 type CommentComposerProps = {
   onSubmit?: (comment: { text: string; image?: File; gif?: string }) => void;
@@ -21,6 +22,30 @@ export default function CommentComposer({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uniqueId = useId();
+  const { registerFocus } = useCommentFocus();
+
+  // Register focus function with context
+  useEffect(() => {
+    const focusFn = () => {
+      if (textareaRef.current) {
+        textareaRef.current.focus();
+        textareaRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    };
+    registerFocus(focusFn);
+
+    // Check if we should focus on mount (e.g., from URL hash)
+    if (typeof window !== "undefined" && window.location.hash === "#comment") {
+      setTimeout(() => {
+        focusFn();
+        // Remove hash from URL without scrolling
+        window.history.replaceState(null, "", window.location.pathname);
+      }, 100);
+    }
+  }, [registerFocus]);
 
   const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;

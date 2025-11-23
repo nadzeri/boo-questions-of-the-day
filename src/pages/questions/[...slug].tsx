@@ -4,6 +4,7 @@ import Link from "next/link";
 import QuestionCard from "@/components/QuestionCard";
 import CommentComposer from "@/components/CommentComposer";
 import CommentCard from "@/components/CommentCard";
+import { CommentFocusProvider } from "@/context/CommentFocusContext";
 
 type QuestionPageProps = {
   question?: Question;
@@ -68,21 +69,21 @@ export default function QuestionPage({ question, error }: QuestionPageProps) {
     (comment) => !comment.parent
   );
 
-  console.log("Question comments:", question.comments);
-
   return (
-    <div className="flex flex-col items-center justify-center p-16 gap-y-4 sm:items-start">
-      <QuestionCard question={question} />
-      <CommentComposer />
-      {/* Render all top-level comments */}
-      {question.comments.length > 0 && (
-        <div className="flex flex-col gap-y-5 w-full">
-          {question.comments.map((comment) => (
-            <div key={comment.id}>{renderComment(comment)}</div>
-          ))}
-        </div>
-      )}
-    </div>
+    <CommentFocusProvider>
+      <div className="flex flex-col items-center justify-center p-16 gap-y-4 sm:items-start">
+        <QuestionCard question={question} />
+        <CommentComposer />
+        {/* Render all top-level comments */}
+        {question.comments.length > 0 && (
+          <div className="flex flex-col gap-y-5 w-full">
+            {question.comments.map((comment) => (
+              <div key={comment.id}>{renderComment(comment)}</div>
+            ))}
+          </div>
+        )}
+      </div>
+    </CommentFocusProvider>
   );
 }
 
