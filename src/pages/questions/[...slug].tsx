@@ -2,6 +2,7 @@ import { Question } from "@/lib/types";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
 import QuestionCard from "@/components/QuestionCard";
+import CommentComposer from "@/components/CommentComposer";
 
 type QuestionPageProps = {
   question?: Question;
@@ -29,10 +30,9 @@ export default function QuestionPage({ question, error }: QuestionPageProps) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-16 sm:items-start">
-      <div className="w-full max-w-2xl">
-        <QuestionCard question={question} />
-      </div>
+    <div className="flex flex-col items-center justify-center p-16 gap-y-4 sm:items-start">
+      <QuestionCard question={question} />
+      <CommentComposer />
     </div>
   );
 }
